@@ -57,10 +57,12 @@ class Cursor
 
     json = response.parsed_response
 
-    @collection += if results_remaining < json['data'].size
-      json['data'].slice(0, results_remaining)
-    else
-      json['data']
+    if json['data']&.first&.is_a? Hash
+      @collection += if results_remaining < json['data'].size
+        json['data'].slice(0, results_remaining)
+      else
+        json['data']
+      end
     end
 
     @after_cursor = after_cursor(json)
